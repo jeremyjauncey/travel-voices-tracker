@@ -752,7 +752,7 @@ function filterFeed(){
 // === TAB: JEREMY'S FEED ===
 function renderJeremy(){
   const el=document.getElementById('tab-jeremy');
-  const posts=DATA.jeremy_posts;
+  const posts=DATA.jeremy.posts;
   const totalWords=posts.reduce((s,p)=>s+p.word_count,0);
   const avgWords=Math.round(totalWords/posts.length);
   const totalPosts=posts.length;
