@@ -33,6 +33,22 @@ body{font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-
 .logo-sub{font-size:11px;color:var(--text-muted);letter-spacing:0.5px}
 .nav{display:flex;gap:0;height:56px}
 .nav-btn{background:none;border:none;color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;letter-spacing:0.5px;padding:0 16px;cursor:pointer;height:100%;display:flex;align-items:center;border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase}
+.refresh-btn{background:none;border:1px solid var(--border);color:var(--accent);font-family:var(--font-mono);font-size:11px;letter-spacing:0.5px;padding:6px 14px;cursor:pointer;border-radius:6px;display:flex;align-items:center;gap:6px;transition:all 0.2s;text-transform:uppercase;white-space:nowrap}
+.refresh-btn:hover{background:rgba(0,212,170,0.1);border-color:var(--accent)}
+.refresh-btn svg{width:14px;height:14px}
+.refresh-modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center}
+.refresh-modal-overlay.active{display:flex}
+.refresh-modal{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:32px;max-width:520px;width:90%}
+.refresh-modal h3{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--text-primary)}
+.refresh-modal p{font-size:13px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6}
+.refresh-modal .refresh-options{display:flex;flex-direction:column;gap:10px}
+.refresh-modal .refresh-opt{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.refresh-modal .refresh-opt:hover{border-color:var(--accent);background:rgba(0,212,170,0.05)}
+.refresh-modal .refresh-opt .opt-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.refresh-modal .refresh-opt .opt-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.refresh-modal .refresh-opt .opt-desc{font-size:11px;color:var(--text-secondary);line-height:1.4}
+.refresh-modal .refresh-close{background:none;border:1px solid var(--border);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:8px 20px;border-radius:6px;cursor:pointer;margin-top:16px;transition:all 0.2s}
+.refresh-modal .refresh-close:hover{color:var(--text-primary);border-color:var(--text-secondary)}
 .nav-btn:hover{color:var(--text-primary);background:var(--bg-hover)}
 .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .hamburger{display:none;background:none;border:none;color:var(--text-primary);font-size:24px;cursor:pointer}
@@ -183,6 +199,10 @@ tr:hover td{background:var(--bg-hover)}
     <button class="nav-btn" data-tab="network">Network Intel</button>
     <button class="nav-btn" data-tab="growth">Growth</button>
   </nav>
+  <button class="refresh-btn" id="refreshBtn" onclick="openRefreshModal()">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 8a6.5 6.5 0 0 1 11.48-4.17"/><path d="M14.5 8a6.5 6.5 0 0 1-11.48 4.17"/><polyline points="13 1 13 4.5 9.5 4.5"/><polyline points="3 15 3 11.5 6.5 11.5"/></svg>
+    Refresh
+  </button>
   <button class="hamburger" id="hamburgerBtn">&#9776;</button>
 </div>
 <div class="mobile-nav" id="mobileNav">
@@ -243,8 +263,47 @@ tr:hover td{background:var(--bg-hover)}
   </div>
 </div>
 
+<!-- Refresh Modal -->
+<div class="refresh-modal-overlay" id="refreshModal">
+  <div class="refresh-modal">
+    <h3>Refresh Dashboard</h3>
+    <p>Choose what to update. Each option opens Perplexity Computer with a pre-built command.</p>
+    <div class="refresh-options">
+      <a class="refresh-opt" id="refreshAll" onclick="triggerRefresh('all')">
+        <div class="opt-icon">&#x1F504;</div>
+        <div>
+          <div class="opt-title">Full Refresh</div>
+          <div class="opt-desc">Update all 12 voices + Jeremy's posts + follower counts. Takes a few minutes.</div>
+        </div>
+      </a>
+      <a class="refresh-opt" id="refreshVoices" onclick="triggerRefresh('voices')">
+        <div class="opt-icon">&#x1F50D;</div>
+        <div>
+          <div class="opt-title">Voices Only</div>
+          <div class="opt-desc">Pull latest posts from all 12 tracked voices.</div>
+        </div>
+      </a>
+      <a class="refresh-opt" id="refreshJeremy" onclick="triggerRefresh('jeremy')">
+        <div class="opt-icon">&#x1F4DD;</div>
+        <div>
+          <div class="opt-title">Jeremy's Feed Only</div>
+          <div class="opt-desc">Pull your latest LinkedIn posts and update your feed.</div>
+        </div>
+      </a>
+      <a class="refresh-opt" id="refreshDraft" onclick="triggerRefresh('draft')">
+        <div class="opt-icon">&#x270D;&#xFE0F;</div>
+        <div>
+          <div class="opt-title">Draft a Post</div>
+          <div class="opt-desc">Generate a LinkedIn post draft based on latest travel news.</div>
+        </div>
+      </a>
+    </div>
+    <button class="refresh-close" onclick="closeRefreshModal()">Cancel</button>
+  </div>
+</div>
+
 <footer class="footer">
-  Travel Voices Intelligence &mdash; Updated March 15, 2026 &mdash;
+  Travel Voices Intelligence &mdash; Updated <span id="lastUpdatedDate">March 15, 2026</span> &mdash;
   <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
 </footer>
 
@@ -1147,6 +1206,37 @@ function sortVoicePostsBy(field,slug){
     header.children[3].textContent='Engagement ▼';
   }
   rows.forEach(r=>table.appendChild(r));
+}
+
+// === REFRESH MODAL ===
+function openRefreshModal(){
+  document.getElementById('refreshModal').classList.add('active');
+}
+function closeRefreshModal(){
+  document.getElementById('refreshModal').classList.remove('active');
+}
+document.getElementById('refreshModal').addEventListener('click',function(e){
+  if(e.target===this)closeRefreshModal();
+});
+
+function triggerRefresh(type){
+  closeRefreshModal();
+  const prompts={
+    all:'Run a full refresh of my Travel Voices Intelligence Dashboard at travelvoicestracker.netlify.app. Research latest LinkedIn posts from all 12 tracked voices AND my recent LinkedIn posts AND update follower counts for everyone. Merge new posts into the existing data files, rebuild the dashboard DATA, and push to GitHub (repo: jeremyjauncey/travel-voices-tracker). The data files are at /home/user/workspace/all_voices_processed.json, /home/user/workspace/jeremy_all_posts_processed.json, and /home/user/workspace/follower_history.json.',
+    voices:'Research the latest LinkedIn posts from all 12 tracked voices on my Travel Voices Intelligence Dashboard. The voices are: Holly Phillips, Thibault Selderslagh, Scott Eddy, Chip Conley, Dave Gerhardt, Lara Acosta, Jenny Southan, Gillian Tans, Jalil Mekouar, Stuart Greif, Chris Walker, Alex Olley. Merge new posts into /home/user/workspace/all_voices_processed.json, rebuild the dashboard at /home/user/workspace/travel-voices-intel/index.html, and push to GitHub (repo: jeremyjauncey/travel-voices-tracker).',
+    jeremy:'Search for my latest LinkedIn posts (Jeremy Jauncey / jeremyjauncey) from the past 7 days. Add any new posts to /home/user/workspace/jeremy_all_posts_processed.json, rebuild the dashboard at /home/user/workspace/travel-voices-intel/index.html with updated Jeremy Feed data, and push to GitHub (repo: jeremyjauncey/travel-voices-tracker).',
+    draft:'Draft me a LinkedIn post for today. I am Jeremy Jauncey, CEO of Beautiful Destinations (44M social followers, 500+ creators, proprietary AI tools). My audience is C-suite travel executives (CMOs, CEOs at hotels, airlines, DMOs, cruise lines). Search for the latest travel industry news from the past 48 hours, find a strong angle, and write a 150-250 word post in my voice (direct, knowledgeable, opinionated, not corporate). Include a strong hook, structured body, and clear CTA. At least 40% of my posts should be problem-calling. Every post MUST have a CTA.'
+  };
+  const prompt=encodeURIComponent(prompts[type]||prompts.all);
+  window.open('https://www.perplexity.ai/?q='+prompt,'_blank');
+}
+
+// Update lastUpdated date from DATA
+if(DATA.lastUpdated){
+  const d=new Date(DATA.lastUpdated+'T00:00:00');
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const el=document.getElementById('lastUpdatedDate');
+  if(el)el.textContent=months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
 }
 
 </script>
