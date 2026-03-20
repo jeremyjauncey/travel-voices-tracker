@@ -49,6 +49,8 @@ body{font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-
 .refresh-modal .refresh-opt .opt-desc{font-size:11px;color:var(--text-secondary);line-height:1.4}
 .refresh-modal .refresh-close{background:none;border:1px solid var(--border);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:8px 20px;border-radius:6px;cursor:pointer;margin-top:16px;transition:all 0.2s}
 .refresh-modal .refresh-close:hover{color:var(--text-primary);border-color:var(--text-secondary)}
+.copy-toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#0a0f1a;font-family:var(--font-mono);font-size:12px;font-weight:600;padding:12px 24px;border-radius:8px;opacity:0;transition:all 0.3s ease;pointer-events:none;z-index:300;display:flex;align-items:center;gap:8px}
+.copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .nav-btn:hover{color:var(--text-primary);background:var(--bg-hover)}
 .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .hamburger{display:none;background:none;border:none;color:var(--text-primary);font-size:24px;cursor:pointer}
@@ -267,7 +269,7 @@ tr:hover td{background:var(--bg-hover)}
 <div class="refresh-modal-overlay" id="refreshModal">
   <div class="refresh-modal">
     <h3>Refresh Dashboard</h3>
-    <p>Choose what to update. Each option opens Perplexity Computer with a pre-built command.</p>
+    <p>Choose what to update. Each option copies a command to your clipboard — paste it into <a href="https://www.perplexity.ai/computer" target="_blank" style="color:var(--accent);text-decoration:underline">Perplexity Computer</a> to run.</p>
     <div class="refresh-options">
       <a class="refresh-opt" id="refreshAll" onclick="triggerRefresh('all')">
         <div class="opt-icon">&#x1F504;</div>
@@ -300,6 +302,11 @@ tr:hover td{background:var(--bg-hover)}
     </div>
     <button class="refresh-close" onclick="closeRefreshModal()">Cancel</button>
   </div>
+</div>
+
+<div class="copy-toast" id="copyToast">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.25 5l-6.5 6.5L3.25 8"/></svg>
+  Copied to clipboard — paste into Computer
 </div>
 
 <footer class="footer">
@@ -1227,8 +1234,26 @@ function triggerRefresh(type){
     jeremy:'Search for my latest LinkedIn posts (Jeremy Jauncey / jeremyjauncey) from the past 7 days. Add any new posts to /home/user/workspace/jeremy_all_posts_processed.json, rebuild the dashboard at /home/user/workspace/travel-voices-intel/index.html with updated Jeremy Feed data, and push to GitHub (repo: jeremyjauncey/travel-voices-tracker).',
     draft:'Draft me a LinkedIn post for today. I am Jeremy Jauncey, CEO of Beautiful Destinations (44M social followers, 500+ creators, proprietary AI tools). My audience is C-suite travel executives (CMOs, CEOs at hotels, airlines, DMOs, cruise lines). Search for the latest travel industry news from the past 48 hours, find a strong angle, and write a 150-250 word post in my voice (direct, knowledgeable, opinionated, not corporate). Include a strong hook, structured body, and clear CTA. At least 40% of my posts should be problem-calling. Every post MUST have a CTA.'
   };
-  const prompt=encodeURIComponent(prompts[type]||prompts.all);
-  window.open('https://www.perplexity.ai/?q='+prompt,'_blank');
+  const prompt=prompts[type]||prompts.all;
+  navigator.clipboard.writeText(prompt).then(()=>{
+    showCopyToast();
+    setTimeout(()=>{window.open('https://www.perplexity.ai/computer','_blank');},800);
+  }).catch(()=>{
+    // Fallback: select from a textarea
+    const ta=document.createElement('textarea');
+    ta.value=prompt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showCopyToast();
+    setTimeout(()=>{window.open('https://www.perplexity.ai/computer','_blank');},800);
+  });
+}
+function showCopyToast(){
+  const t=document.getElementById('copyToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 // Update lastUpdated date from DATA
