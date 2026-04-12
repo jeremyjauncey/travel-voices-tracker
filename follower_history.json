@@ -1,0 +1,164 @@
+{
+  "lastUpdated": "2026-04-12",
+  "jeremy": {
+    "name": "Jeremy Jauncey",
+    "slug": "jeremy-jauncey",
+    "linkedin": "https://www.linkedin.com/in/jeremyjauncey",
+    "history": [
+      {
+        "date": "2026-03-15",
+        "count": 17023
+      },
+      {
+        "date": "2026-04-12",
+        "count": 18002
+      }
+    ]
+  },
+  "voices": {
+    "holly-phillips": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 15337
+        },
+        {
+          "date": "2026-04-12",
+          "count": 15337
+        }
+      ]
+    },
+    "thibault-selderslagh": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 9412
+        },
+        {
+          "date": "2026-04-12",
+          "count": 10091
+        }
+      ]
+    },
+    "scott-eddy": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 50450
+        },
+        {
+          "date": "2026-04-12",
+          "count": 51477
+        }
+      ]
+    },
+    "chip-conley": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 79442
+        },
+        {
+          "date": "2026-04-12",
+          "count": 81000
+        }
+      ]
+    },
+    "dave-gerhardt": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 196045
+        },
+        {
+          "date": "2026-04-12",
+          "count": 198157
+        }
+      ]
+    },
+    "lara-acosta": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 314329
+        },
+        {
+          "date": "2026-04-12",
+          "count": 322000
+        }
+      ]
+    },
+    "jenny-southan": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 6783
+        },
+        {
+          "date": "2026-04-12",
+          "count": 6887
+        }
+      ]
+    },
+    "gillian-tans": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 23369
+        },
+        {
+          "date": "2026-04-12",
+          "count": 23523
+        }
+      ]
+    },
+    "jalil-mekouar": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 19130
+        },
+        {
+          "date": "2026-04-12",
+          "count": 19191
+        }
+      ]
+    },
+    "stuart-greif": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 19300
+        },
+        {
+          "date": "2026-04-12",
+          "count": 20387
+        }
+      ]
+    },
+    "chris-walker": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 171063
+        },
+        {
+          "date": "2026-04-12",
+          "count": 172191
+        }
+      ]
+    },
+    "alex-olley": {
+      "history": [
+        {
+          "date": "2026-03-15",
+          "count": 18772
+        },
+        {
+          "date": "2026-04-12",
+          "count": 19298
+        }
+      ]
+    }
+  }
+}
